@@ -10,7 +10,8 @@ main = do
         [a] -> case readMaybe a of
             Just g -> case prove g of
                 Just t -> print t
-                _ -> die "No proof."
-            _ -> die "No parse."
-        _ -> usage
-    where usage = die "usage: muri TYPE"
+                _ -> die "Impossible."
+            _ -> die "Couldn't parse."
+        _ -> do
+            arg0 <- getProgName
+            die $ "Usage: " ++ arg0 ++ " TYPE"

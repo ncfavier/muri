@@ -55,5 +55,5 @@ $ muri '(Either (a -> f) (b -> f) -> f) -> ((a, b) -> f) -> f'
 
 ```sh
 $ muri 'a -> b'
-No proof.
+Impossible.
 ```

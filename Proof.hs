@@ -36,11 +36,11 @@ ps |- g =
                 ((apply "afterLeft" n, Function t11 t2):(apply "afterRight" n, Function t12 t2):delete p ps) |- g
             Function t1@(Function t11 t12) t2 -> do
                 r <- ((apply "afterConst" n, Function t12 t2):delete p ps) |- t1
-                (((Apply n r), t2):delete p ps) |- g
+                ((Apply n r, t2):delete p ps) |- g
             -- LJ:
             -- Function t1 t2 -> do
             --     r <- ps |- t1
-            --     (((Apply n r), t2):delete p ps) |- g
+            --     ((Apply n r, t2):delete p ps) |- g
             _ -> empty
         breakdownGoal g = case g of
             And g1 g2 ->

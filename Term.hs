@@ -20,9 +20,3 @@ instance Show Term where
 apply f t = Apply (Var f) t
 apply2 f t1 t2 = Apply (Apply (Var f) t1) t2
 apply3 f t1 t2 t3 = Apply (Apply (Apply (Var f) t1) t2) t3
-
-unused :: String -> Term -> Bool
-unused v (Var v') = v /= v'
-unused v (Pair t1 t2) = unused v t1 && unused v t2
-unused v (Apply t1 t2) = unused v t1 && unused v t2
-unused v (Lambda v' t) = v /= v' && unused v t

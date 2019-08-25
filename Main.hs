@@ -10,8 +10,8 @@ main = do
         [a] -> case readMaybe a of
             Just g -> case prove g of
                 Just t -> print t
-                _ -> die "Impossible."
-            _ -> die "Couldn't parse."
+                Nothing -> die "Impossible."
+            Nothing -> die "Couldn't parse."
         _ -> do
-            arg0 <- getProgName
-            die $ "Usage: " ++ arg0 ++ " TYPE"
+            progName <- getProgName
+            die $ "Usage: " ++ progName ++ " TYPE"

@@ -34,5 +34,7 @@ unused v (Pair t1 t2) = unused v t1 && unused v t2
 unused v (Apply t1 t2) = unused v t1 && unused v t2
 unused v (Lambda v' t) = v /= v' && unused v t
 
+unusedSymbols ps = filter (\v -> all ((unused v) . snd) ps) symbols
+
 applyLeft  = Apply (Var "Left")
 applyRight = Apply (Var "Right")

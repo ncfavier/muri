@@ -37,6 +37,6 @@ ps |- g = liftMaybe (lookup g ps) <|> asum (breakupPremise <$> ps) <|> breakupGo
         Function g1 g2 -> Lambda v1 <$> ((g1, Var v1):ps |- g2)
         _ -> empty
 
-    v1:v2:_ = filter (\v -> all ((unused v) . snd) ps) symbols
+    v1:v2:_ = unusedSymbols ps
 
 prove = ([] |-)

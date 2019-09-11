@@ -29,12 +29,12 @@ instance Show Term where
 
 symbols = [1..] >>= (`replicateM` ['a'..'z'])
 
-unused x (Var x') = x /= x'
-unused x (Pair t1 t2) = unused x t1 && unused x t2
-unused x (Apply t1 t2) = unused x t1 && unused x t2
-unused x (Lambda x' t) = x /= x' && unused x t
+x `unusedIn` Var x' = x /= x'
+x `unusedIn` Pair t1 t2 = x `unusedIn` t1 && x `unusedIn` t2
+x `unusedIn` Apply t1 t2 = x `unusedIn` t1 && x `unusedIn` t2
+x `unusedIn` Lambda x' t = x /= x' && x `unusedIn` t
 
-unusedSymbols ps = filter (\x -> all ((unused x) . snd) ps) symbols
+unusedSymbols ps = [x | x <- symbols, all ((x `unusedIn`) <$> snd) ps]
 
 applyLeft  = Apply (Var "Left")
 applyRight = Apply (Var "Right")

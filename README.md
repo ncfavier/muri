@@ -32,34 +32,30 @@ $ muri '(a, b) -> Either a b'
 
 ```
 $ muri 'Either (a, c) (b, c) -> (Either a b, c)'
-\a -> case a of { Left (b, c) -> (Left b, c); Right (d, e) -> (Right d, e) }
+\a -> case a of { Left (b, c) -> (Left b, c); Right (b, c) -> (Right b, c) }
 ```
 
 ```
 $ muri '(Either (a -> f) a -> f) -> f'
-\a -> (\b -> a (Left b)) (\c -> a (Right c))
+\a -> a (Left (\c -> a (Right c)))
 ```
 
 ```
 $ muri '(a -> b) -> (Either (a -> f) b -> f) -> f'
-\a -> \b -> (\c -> b (Left c)) (\f -> (\d -> b (Right d)) (a f))
+\a -> \b -> b (Left (\c -> b (Right (a c))))
 ```
 
 ```
 $ muri '(Either (a -> f) (b -> f) -> f) -> ((a, b) -> f) -> f'
-\a -> \d -> (\b -> a (Left b)) (\h -> (\c -> a (Right c)) ((\e -> \f -> d (e, f)) h))
+\a -> \b -> a (Left (\e -> a (Right (\f -> b (e, f)))))
 ```
 
 ```
 $ muri '((a -> b) -> c) -> ((a, b -> c) -> b) -> c'
-\a -> \b -> a (\f -> (\c -> \d -> b (c, d)) f (\e -> a (\_ -> e)))
+\a -> \b -> a (\f -> b (f, \e -> a (\_ -> e)))
 ```
 
 ```
 $ muri 'a -> b'
 Impossible.
 ```
-
-## To do
-
-- β-reduce output terms

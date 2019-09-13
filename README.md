@@ -22,25 +22,25 @@ muri currently doesn't have a build system, so you'll have to compile it yoursel
 
     $ muri 'a -> (b, c) -> (b, (a, c))'
     \a -> \(b, c) -> (b, (a, c))
-
+<!-- -->
     $ muri '(a, b) -> Either a b'
     \(a, b) -> Left a
-
+<!-- -->
     $ muri 'Either (a, c) (b, c) -> (Either a b, c)'
     \a -> case a of { Left (b, c) -> (Left b, c); Right (d, e) -> (Right d, e) }
-
+<!-- -->
     $ muri '(Either (a -> f) a -> f) -> f'
     \a -> (\b -> a (Left b)) (\c -> a (Right c))
-
+<!-- -->
     $ muri '(a -> b) -> (Either (a -> f) b -> f) -> f'
     \a -> \b -> (\c -> b (Left c)) (\f -> (\d -> b (Right d)) (a f))
-
+<!-- -->
     $ muri '(Either (a -> f) (b -> f) -> f) -> ((a, b) -> f) -> f'
     \a -> \d -> (\b -> a (Left b)) (\h -> (\c -> a (Right c)) ((\e -> \f -> d (e, f)) h))
-
+<!-- -->
     $ muri '((a -> b) -> c) -> ((a, b -> c) -> b) -> c'
     \a -> \b -> a (\f -> (\c -> \d -> b (c, d)) f (\e -> a (\_ -> e)))
-
+<!-- -->
     $ muri 'a -> b'
     Impossible.
 

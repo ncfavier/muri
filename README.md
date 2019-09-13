@@ -1,6 +1,6 @@
 # muri :: Type -> Maybe Term
 
-muri takes a Haskell type, and generates a Haskell term with that type, if possible.
+muri takes a Haskell type, and generates a Haskell term with that type (or a more general one), if possible.
 
 Equivalently, under the [propositions-as-types correspondence](https://en.wikipedia.org/wiki/Curry%E2%80%93Howard_correspondence), muri is a theorem prover for intuitionistic propositional logic. It takes a proposition as input, and produces a proof of that proposition, if one exists.
 

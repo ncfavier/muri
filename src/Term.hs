@@ -8,9 +8,9 @@ infixr 0 :\->:
 data Term = Var String
           | Term :*: Term
           | Term :$: Term
-          | String :\->: Term
-          | Unpair Term String String Term
-          | Uneither Term String String Term Term
+          | Term :\->: Term
+          | Let Term Term Term
+          | Case Term Term Term Term Term
           deriving (Read, Eq)
 
 instance Show Term where
@@ -21,13 +21,13 @@ instance Show Term where
         showsPrec prec v . showChar ' ' . showsPrec (prec + 1) v'
         where prec = 10
     showsPrec d (x :\->: v) = showParen (d > prec) $
-        showChar '\\' . showString x . showString " -> " . showsPrec prec v
+        showChar '\\' . showsPrec prec x . showString " -> " . showsPrec prec v
         where prec = 0
-    showsPrec d (Unpair p x1 x2 e) = showParen (d > prec) $
-        showString ("let (" ++ x1 ++ ", " ++ x2 ++ ") = ") . showsPrec prec p . showString " in " . showsPrec prec e
+    showsPrec d (Let b v e) = showParen (d > prec) $
+        showString "let " . showsPrec prec b . showString " = " . showsPrec prec v . showString " in " . showsPrec prec e
         where prec = 0
-    showsPrec d (Uneither e x1 x2 l r) = showParen (d > prec) $
-        showString "case " . showsPrec prec e . showString (" of { Left " ++ x1 ++ " -> ") . showsPrec prec l . showString ("; Right " ++ x2 ++ " -> ") . showsPrec prec r . showString " }"
+    showsPrec d (Case e b1 b2 l r) = showParen (d > prec) $
+        showString "case " . showsPrec prec e . showString " of { Left " . showsPrec 11 b1 . showString " -> " . showsPrec prec l . showString "; Right " . showsPrec 11 b2 . showString " -> " . showsPrec prec r . showString " }"
         where prec = 0
 
 symbols = [1..] >>= (`replicateM` ['a'..'z'])
@@ -35,6 +35,4 @@ symbols = [1..] >>= (`replicateM` ['a'..'z'])
 x `unusedIn` Var x' = x /= x'
 x `unusedIn` (t1 :*: t2) = x `unusedIn` t1 && x `unusedIn` t2
 x `unusedIn` (t1 :$: t2) = x `unusedIn` t1 && x `unusedIn` t2
-x `unusedIn` (x' :\->: t) = x /= x' && x `unusedIn` t
-
-unusedSymbols ps = [x | x <- symbols, all ((x `unusedIn`) <$> snd) ps]
+x `unusedIn` (x' :\->: t) = x `unusedIn` x' && x `unusedIn` t

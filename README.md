@@ -22,17 +22,17 @@ muri currently doesn't have a build system, so you'll have to compile it yoursel
 
 ```sh
 $ muri 'a -> (b, c) -> (b, (a, c))'
-\a -> \b -> let (c, d) = b in (c, (a, d))
+\a -> \(b, c) -> (b, (a, c))
 ```
 
 ```sh
 $ muri '(a, b) -> Either a b'
-\a -> let (b, c) = a in Left b
+\(a, b) -> Left a
 ```
 
 ```sh
 $ muri 'Either (a, c) (b, c) -> (Either a b, c)'
-\a -> case a of { Left b -> let (a, c) = b in (Left a, c); Right c -> let (a, b) = c in (Right a, b) }
+\a -> case a of { Left (b, c) -> (Left b, c); Right (d, e) -> (Right d, e) }
 ```
 
 ```sh
@@ -62,4 +62,4 @@ Impossible.
 
 ## To do
 
-- rewrite output terms nicely (e.g. rewrite `\a -> let (b, c) = a in b` to `\(b, c) -> b`)
+- β-reduce output terms

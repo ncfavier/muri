@@ -8,12 +8,12 @@ import Data.Foldable
 import Type
 import Term
 
-liftMaybe = maybe empty pure
+alt = asum . fmap pure
 
 infix 4 |-
 (|-) :: (Alternative m, Monad m) => [(Type, Term)] -> Type -> m Term
 ps |- g =
-    liftMaybe (lookup g ps) <|>
+    alt (lookup g ps) <|>
     breakupGoalImplication g <|>
     asum (breakupPremise <$> ps) <|>
     breakupGoal g

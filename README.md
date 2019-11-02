@@ -1,4 +1,4 @@
-# muri :: Type -> Maybe Term
+# `muri :: Type -> Maybe Term`
 
 muri takes a Haskell type, and generates a Haskell term with that type (or a more general one), if possible.
 

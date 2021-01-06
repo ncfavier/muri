@@ -16,8 +16,6 @@ muri was inspired by Lennart Augustsson's [Djinn](https://github.com/augustss/dj
 muri TYPE
 ```
 
-muri currently doesn't have a build system, so you'll have to compile it yourself, or run it with `runhaskell` or similar.
-
 ## Examples
 
 ```

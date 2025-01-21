@@ -21,6 +21,7 @@ ps |- g =
     breakupPremise p@(t, v) = case t of
         t1 :/\: t2 -> Let b v <$> (p ++ ps' |- g)
             where (b, p, _) = bindings t
+        Void -> return $ Var "absurd" :$: v
         t1 :\/: t2 -> Case v b1 b2 <$> (p1 ++ ps' |- g) <*> (p2 ++ ps' |- g)
             where (b1, p1, _) = bindings t1
                   (b2, p2, _) = bindings t2

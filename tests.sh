@@ -12,5 +12,6 @@ Either (a, c) (b, c) -> (Either a b, c)
 (a -> b) -> (Either (a -> f) b -> f) -> f
 (Either (a -> f) (b -> f) -> f) -> ((a, b) -> f) -> f
 ((a -> b) -> c) -> ((a, b -> c) -> b) -> c
+((((a -> Void) -> Void) -> a) -> a) -> (a -> Void) -> Void
 a -> b
 EOF

@@ -9,12 +9,13 @@ infixl 2 :\/:
 infixr 0 :->:
 data Type = TVar String
           | Type :/\: Type
+          | Void
           | Type :\/: Type
           | Type :->: Type
           deriving (Show, Eq)
 
 instance Read Type where
-    readPrec = parens $ readType +++ readAnd +++ readOr +++ readFunction where
+    readPrec = parens $ readType +++ readAnd +++ readVoid +++ readOr +++ readFunction where
         readType = do
             Ident t <- lexP
             guard $ isLower (head t)
@@ -26,6 +27,9 @@ instance Read Type where
             b        <- reset readPrec
             Punc ")" <- lexP
             return (a :/\: b)
+        readVoid = do
+            Ident "Void" <- lexP
+            return Void
         readOr = prec 10 $ do
             Ident "Either" <- lexP
             a              <- step readPrec

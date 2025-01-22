@@ -6,6 +6,7 @@ infixl 3 :*:
 infixl 9 :$:
 infixr 0 :\->:
 data Term = Var String
+          | Unit
           | Term :*: Term
           | Term :$: Term
           | Term :\->: Term
@@ -15,6 +16,7 @@ data Term = Var String
 
 instance Show Term where
     showsPrec d (Var x) = showString x
+    showsPrec d Unit = showString "()"
     showsPrec d (l :*: r) =
         showChar '(' . showsPrec 0 l . showString ", " . showsPrec 0 r . showChar ')'
     showsPrec d (v :$: v') = showParen (d > prec) $
@@ -33,6 +35,7 @@ instance Show Term where
 symbols = [1..] >>= (`replicateM` ['a'..'z'])
 
 x `unusedIn` Var x' = x /= x'
+x `unusedIn` Unit = True
 x `unusedIn` (t1 :*: t2) = x `unusedIn` t1 && x `unusedIn` t2
 x `unusedIn` (t1 :$: t2) = x `unusedIn` t1 && x `unusedIn` t2
 x `unusedIn` (x' :\->: t) = x `unusedIn` x' && x `unusedIn` t
@@ -44,6 +47,7 @@ substitute x v e = case e of
     Var y
         | y == x -> v
         | otherwise -> e
+    Unit -> Unit
     a :*: b -> substitute x v a :*: substitute x v b
     a :$: b -> substitute x v a :$: substitute x v b
     y :\->: e'

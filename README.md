@@ -4,9 +4,9 @@ muri takes a Haskell type, and generates a Haskell term with that type (or a mor
 
 Equivalently, under the [propositions-as-types correspondence](https://en.wikipedia.org/wiki/Curry%E2%80%93Howard_correspondence), muri is a theorem prover for intuitionistic propositional logic. It takes a proposition as input, and produces a proof of that proposition, if one exists.
 
-Input types are restricted to type variables, product types `(a, b)`, the empty type `Void`, sum types `Either a b` and function types `a -> b`.
+Input types are restricted to type variables, the unit type `()`, product types `(a, b)`, the empty type `Void`, sum types `Either a b` and function types `a -> b`.
 
-Output terms are built using lambda abstraction, function application, `let`, `absurd` and `case` expressions, pair construction and the `Left` and `Right` type constructors.
+Output terms are built using lambda abstraction, function application, `let`, `absurd` and `case` expressions, the empty tuple `()`, pair construction and the `Left` and `Right` type constructors.
 
 muri was inspired by Lennart Augustsson's [Djinn](https://github.com/augustss/djinn), and uses the LJT calculus from "Contraction-Free Sequent Calculi for Intuitionistic Logic" by Roy Dyckhoff to ensure termination.
 

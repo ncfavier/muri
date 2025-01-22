@@ -8,6 +8,7 @@ infixl 3 :/\:
 infixl 2 :\/:
 infixr 0 :->:
 data Type = TVar String
+          | TUnit
           | Type :/\: Type
           | Void
           | Type :\/: Type
@@ -15,11 +16,15 @@ data Type = TVar String
           deriving (Show, Eq)
 
 instance Read Type where
-    readPrec = parens $ readType +++ readAnd +++ readVoid +++ readOr +++ readFunction where
+    readPrec = parens $ readType +++ readUnit +++ readAnd +++ readVoid +++ readOr +++ readFunction where
         readType = do
             Ident t <- lexP
             guard $ isLower (head t)
             return (TVar t)
+        readUnit = do
+            Punc "(" <- lexP
+            Punc ")" <- lexP
+            return TUnit
         readAnd = do
             Punc "(" <- lexP
             a        <- reset readPrec

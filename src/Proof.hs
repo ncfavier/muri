@@ -19,6 +19,7 @@ ps |- g =
     breakupGoal g
     where
     breakupPremise p@(t, v) = case t of
+        TUnit -> ps' |- g
         t1 :/\: t2 -> Let b v <$> (p ++ ps' |- g)
             where (b, p, _) = bindings t
         Void -> return $ Var "absurd" :$: v
@@ -27,6 +28,8 @@ ps |- g =
                   (b2, p2, _) = bindings t2
         t1 :->: t2 | Just v' <- lookup t1 ps' ->
             (t2, apply v v'):ps' |- g
+        TUnit :->: t ->
+            (t, apply v Unit):ps' |- g
         t11 :/\: t12 :->: t2 ->
             (t11 :->: t12 :->: t2, Var x1 :\->: Var x2 :\->: apply v (Var x1 :*: Var x2)):ps' |- g
         t11 :\/: t12 :->: t2 -> pl:pr:ps' |- g
@@ -43,6 +46,7 @@ ps |- g =
             where (b, p, _) = bindings t1
         _ -> empty
     breakupGoal t = case t of
+        TUnit -> return Unit
         t1 :/\: t2 ->
             (:*:) <$> (ps |- t1) <*> (ps |- t2)
         t1 :\/: t2 ->
@@ -50,6 +54,7 @@ ps |- g =
         _ -> empty
 
     bindings = go unusedSymbols where
+        go xs TUnit = (Unit, [], xs)
         go xs (t1 :/\: t2) = (b1 :*: b2, p1 ++ p2, xs'')
             where (b1, p1, xs')  = go xs t1
                   (b2, p2, xs'') = go xs' t2
